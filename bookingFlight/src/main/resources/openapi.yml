@@ -1,0 +1,238 @@
+openapi: 3.0.1
+info:
+  title: CRUD Demo
+  description: CRUD Demo
+  contact:
+    name: DevOps Factory
+  version: 0.0.1
+servers:
+  - url: http://{ip}:8080
+    description: Generated server url
+    variables:
+      ip:
+        default: localhost
+tags:
+  - name: auth
+    description: Authentication
+  - name: user
+    description: User
+  - name: ticket
+    description: ticket
+  - name: calendar
+    description: calendar
+  - name: notification
+    description: notification
+paths:
+  /user/register:
+    post:
+      tags:
+        - user
+      description: Register
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                username:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /user/password:
+    post:
+      tags:
+        - user
+      description: Change Password
+      operationId: changePassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                currentPassword:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /user/forgotPassword/{email}:
+    post:
+      tags:
+        - user
+      description: Reset password
+      operationId: forgotPassword
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Password reset"
+  /login:
+    post:
+      tags:
+        - auth
+      description: "login"
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInModel'
+      responses:
+        "200":
+          description: "logged in successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+  /login/users:
+    get:
+      tags:
+        - user
+      description: Find all users.
+      operationId: findAllUsers
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCollection'
+  /login/{username}:
+    get:
+      tags:
+        - user
+      description: "get username"
+      operationId: getRole
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "get role successfully"
+          content:
+            text/plain:
+              schema:
+                type: String
+  /login/user/{username}:
+    get:
+      tags:
+        - user
+      description: Get user by username
+      operationId: getUserByUsername
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: No available ticket.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  schemas:
+    UserDays:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        days:
+          type: array
+          items:
+            type: boolean
+        order:
+          type: integer
+          format: int64
+    SignInModel:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        role:
+          $ref: '#/components/schemas/UserRole'
+    UserRole:
+      type: object
+      properties:
+        name:
+          type: string
+    UserCollection:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    LoginResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+    ApiError:
+      required:
+        - code
+        - description
+        - status
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        code:
+          type: string
+        description:
+          type: string
+      description: Common API error model.
+
