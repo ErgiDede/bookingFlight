@@ -1,8 +1,8 @@
 package com.booking.flight.app.user;
 
 
-import com.booking.flight.app.model.enums.Role;
-import com.booking.flight.app.model.enums.UserStatus;
+import com.booking.flight.app.shared.enums.Role;
+import com.booking.flight.app.shared.enums.UserStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Size;

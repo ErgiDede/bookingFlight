@@ -1,5 +1,7 @@
-package com.booking.flight.app.user;
+package com.booking.flight.app.booking;
 
+import com.booking.flight.app.flight.Flight;
+import com.booking.flight.app.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

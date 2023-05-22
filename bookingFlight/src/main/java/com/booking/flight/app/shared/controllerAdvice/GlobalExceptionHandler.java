@@ -1,11 +1,10 @@
-package com.booking.flight.app.model.controllerAdvice;
+package com.booking.flight.app.shared.controllerAdvice;
 
-
-import com.booking.flight.app.model.exceptions.BadRequestException;
-import com.booking.flight.app.model.exceptions.ForbiddenException;
-import com.booking.flight.app.model.exceptions.UserAlreadyExistsException;
-import com.booking.flight.app.model.exceptions.UserNotFoundException;
-import com.booking.flight.app.model.objects.ErrorMessageJson;
+import com.booking.flight.app.shared.exceptions.BadRequestException;
+import com.booking.flight.app.shared.exceptions.ForbiddenException;
+import com.booking.flight.app.shared.exceptions.UserAlreadyExistsException;
+import com.booking.flight.app.shared.exceptions.UserNotFoundException;
+import com.booking.flight.app.shared.objects.ErrorMessageJson;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

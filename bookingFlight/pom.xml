@@ -91,6 +91,12 @@
 				<version>0.11.5</version>
 			</dependency>
 
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+			<version>0.2.3</version>
+		</dependency>
+
 			<dependency>
 				<groupId>org.springdoc</groupId>
 				<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -146,6 +152,39 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>6.6.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<typeMappings>
+								<typeMapping>OffsetDateTime=Instant</typeMapping>
+							</typeMappings>
+							<importMappings>
+								<importMapping>java.time.OffsetDateTime=java.time.Instant</importMapping>
+							</importMappings>
+							<configHelp>false</configHelp>
+							<configOptions>
+								<useJakartaEe>true</useJakartaEe>
+								<serializableModel>true</serializableModel>
+								<interfaceOnly>true</interfaceOnly>
+								<returnResponse>false</returnResponse>
+							</configOptions>
+							<inputSpec>
+								${project.basedir}/src/main/resources/openapi.yaml
+							</inputSpec>
+							<generatorName>spring</generatorName>
+							<apiPackage>com.booking.flight.api</apiPackage>
+							<modelPackage>com.booking.flight.model</modelPackage>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

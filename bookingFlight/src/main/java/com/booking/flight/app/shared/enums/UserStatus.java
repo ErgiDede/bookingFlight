@@ -1,4 +1,4 @@
-package com.booking.flight.app.model.enums;
+package com.booking.flight.app.shared.enums;
 
 public enum UserStatus {
     ACTIVE,

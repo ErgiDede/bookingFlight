@@ -1,7 +1,8 @@
-package com.booking.flight.app.user;
+package com.booking.flight.app.flight;
 
 
-import com.booking.flight.app.model.enums.BookingClassesEnum;
+import com.booking.flight.app.booking.Booking;
+import com.booking.flight.app.shared.enums.BookingClassesEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,6 +44,7 @@ import java.util.List;
         @Column(name = "totalSeats",nullable = false)
         private Integer TotalSeats;
         @Column(name = "classes",nullable = false)
+
         @Enumerated(value = EnumType.STRING)
         private BookingClassesEnum bookingClasses;
 

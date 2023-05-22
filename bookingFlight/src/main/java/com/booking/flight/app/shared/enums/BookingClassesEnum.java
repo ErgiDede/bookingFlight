@@ -1,8 +1,8 @@
-package com.booking.flight.app.model.enums;
+package com.booking.flight.app.shared.enums;
 
 public enum BookingClassesEnum {
     ECONOMY,
     PREMIUM_ECONOMY,
     BUSINESS,
-    FIRST
+    LOW_COST
 }

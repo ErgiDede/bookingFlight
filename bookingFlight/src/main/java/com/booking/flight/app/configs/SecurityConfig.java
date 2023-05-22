@@ -1,8 +1,9 @@
 package com.booking.flight.app.configs;
 
 import com.booking.flight.app.configs.jwt.JwtFilter;
-import com.booking.flight.app.model.enums.Role;
 
+
+import com.booking.flight.app.shared.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

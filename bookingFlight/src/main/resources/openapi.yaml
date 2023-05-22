@@ -1,0 +1,28 @@
+openapi: 3.0.1
+info:
+  title: Sample Project
+  description: Sample Description
+  contact:
+    name: Sample Project
+  version: 1.0.0
+servers:
+  - url: http://{ip}:8080
+    description: Generated server url
+    variables:
+      ip:
+        default: localhost
+tags:
+  - name: auth
+    description: Authentication
+  - name: user
+    description: User
+paths:
+  # AUTH
+  /login:
+    $ref: './Paths/login.yaml'
+components:
+  schemas:
+    LoginRequest:
+      $ref: './Components/Login/LoginRequest.yaml'
+    LoginResponse:
+      $ref: './Components/Login/LoginResponse.yaml'

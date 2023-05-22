@@ -2,9 +2,9 @@ package com.booking.flight.app.auth;
 
 
 import com.booking.flight.app.configs.jwt.JwtUtils;
-import com.booking.flight.app.model.enums.Role;
-import com.booking.flight.app.model.exceptions.ForbiddenException;
-import com.booking.flight.app.model.utils.ModelMapperUtils;
+import com.booking.flight.app.shared.enums.Role;
+import com.booking.flight.app.shared.exceptions.ForbiddenException;
+import com.booking.flight.app.shared.utils.ModelMapperUtils;
 import com.booking.flight.app.user.UserDto;
 import com.booking.flight.app.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;

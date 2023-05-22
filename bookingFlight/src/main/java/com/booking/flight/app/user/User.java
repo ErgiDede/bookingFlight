@@ -1,8 +1,7 @@
 package com.booking.flight.app.user;
 
-
-import com.booking.flight.app.model.enums.Role;
-import com.booking.flight.app.model.enums.UserStatus;
+import com.booking.flight.app.shared.enums.Role;
+import com.booking.flight.app.shared.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

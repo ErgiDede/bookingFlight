@@ -1,6 +1,6 @@
 package com.booking.flight.app.dto;
 
-import com.booking.flight.app.user.Flight;
+import com.booking.flight.app.flight.Flight;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

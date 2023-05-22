@@ -1,6 +1,6 @@
 package com.booking.flight.app.dto;
 
-import com.booking.flight.app.model.enums.BookingClassesEnum;
+import com.booking.flight.app.shared.enums.BookingClassesEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

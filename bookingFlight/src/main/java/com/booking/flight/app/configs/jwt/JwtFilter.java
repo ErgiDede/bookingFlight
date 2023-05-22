@@ -1,9 +1,8 @@
 package com.booking.flight.app.configs.jwt;
 
-
-import com.booking.flight.app.model.helper.ContextHelper;
-import com.booking.flight.app.model.objects.ErrorMessageJson;
-import com.booking.flight.app.model.utils.JsonMapperUtils;
+import com.booking.flight.app.shared.helper.ContextHelper;
+import com.booking.flight.app.shared.objects.ErrorMessageJson;
+import com.booking.flight.app.shared.utils.JsonMapperUtils;
 import com.booking.flight.app.user.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

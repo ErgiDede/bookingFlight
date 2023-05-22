@@ -1,7 +1,7 @@
 package com.booking.flight.app.auth;
 
 
-import com.booking.flight.app.model.objects.MessageJson;
+import com.booking.flight.app.shared.objects.MessageJson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

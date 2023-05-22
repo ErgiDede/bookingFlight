@@ -1,6 +1,7 @@
 package com.booking.flight.app.user;
 
-import com.booking.flight.app.model.enums.UserStatus;
+
+import com.booking.flight.app.shared.enums.UserStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
