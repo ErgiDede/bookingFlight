@@ -6,6 +6,7 @@ import com.booking.flight.app.shared.enums.Role;
 import com.booking.flight.app.shared.exceptions.ForbiddenException;
 import com.booking.flight.app.shared.utils.ModelMapperUtils;
 import com.booking.flight.app.user.UserDto;
+import com.booking.flight.app.user.UserEntity;
 import com.booking.flight.app.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,6 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
-    public void registerUser(RegisterForm registerForm) {
-        UserDto userDto = ModelMapperUtils.map(registerForm, UserDto.class);
-        userDto.setRole(Role.USER);
-        userService.createUser(userDto);
-    }
 
     public AuthResponse authenticate(AuthRequest request) {
         authenticationManager.authenticate(
@@ -43,6 +39,20 @@ public class AuthService {
                 .refreshToken(refreshToken)
                 .build();
     }
+/*    public LoginResponse login(LoginRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
+        );
+        var user = userService.findByActiveUsername(request.getUsername());
+        var jwtToken = jwtUtils.generateToken(user);
+        var refreshToken = jwtUtils.generateRefreshToken(user);
+        return new LoginResponse()
+                .token(jwtToken)
+                .refreshToken(refreshToken);
+    }*/
 
     public AuthResponse refreshToken(HttpServletRequest request) {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -65,5 +75,4 @@ public class AuthService {
         }
         throw new ForbiddenException("Session Expired.");
     }
-
 }

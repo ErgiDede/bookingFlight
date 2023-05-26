@@ -1,6 +1,6 @@
 type: object
 properties:
-  idCard:
+  username:
     type: string
   password:
     type: string

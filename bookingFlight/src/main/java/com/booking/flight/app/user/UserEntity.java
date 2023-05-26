@@ -3,6 +3,7 @@ package com.booking.flight.app.user;
 import com.booking.flight.app.shared.enums.Role;
 import com.booking.flight.app.shared.enums.UserStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class User implements UserDetails {
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,12 +35,21 @@ public class User implements UserDetails {
     private String username;
 
     private String password;
+
     private Role role;
 
     private UserStatus status;
+
     private Instant createdAt;
+
     private Instant updatedAt;
 
+    @Column(name = "email",unique = true)
+    private String email;
+
+    private String phoneNumber;
+
+    private String address;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

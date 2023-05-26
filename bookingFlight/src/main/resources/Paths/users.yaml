@@ -1,0 +1,12 @@
+get:
+  tags:
+    - Users
+  summary: Gets All Users
+  operationId: getAllUsers
+  responses:
+    '200':
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: './Components/schemas/UserCollection.yaml'

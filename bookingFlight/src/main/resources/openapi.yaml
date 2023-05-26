@@ -26,3 +26,5 @@ components:
       $ref: './Components/Login/LoginRequest.yaml'
     LoginResponse:
       $ref: './Components/Login/LoginResponse.yaml'
+    User:
+      $ref: './Components/schemas/User.yaml'

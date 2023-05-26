@@ -1,7 +1,8 @@
 package com.booking.flight.app.booking;
 
-import com.booking.flight.app.flight.Flight;
-import com.booking.flight.app.user.User;
+import com.booking.flight.app.flight.BookingFlight;
+import com.booking.flight.app.flight.FlightEntity;
+import com.booking.flight.app.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "booking")
-public class Booking {
+public class BookingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,14 +27,10 @@ public class Booking {
     private String cancellationReason;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id",nullable = false)
-    private User user;
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity userEntity;
 
-    @ManyToMany
-    @JoinTable(
-            name = "booking_flight",
-            joinColumns = @JoinColumn(name = "booking_id"),
-            inverseJoinColumns = @JoinColumn(name = "flight_id")
-    )
-    private List<Flight> flights;
+    @OneToMany(mappedBy = "bookingEntity", cascade = CascadeType.ALL)
+    private List<BookingFlight> bookingFlights;
+
 }

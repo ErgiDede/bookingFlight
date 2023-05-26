@@ -30,17 +30,29 @@ public class UserService {
                 orElseThrow(UserNotFoundException::new);
     }
 
+    public UserDto getByEmail(String email) throws UsernameNotFoundException {
+        UserEntity user = userRepo.findByEmail(email).
+                orElseThrow(UserNotFoundException::new);
+        UserDto userDto = ModelMapperUtils.map(user, UserDto.class);
+        return userDto;
+    }
+
     public UserDto updateUser(UserDto userDto) {
         if(!validateUser(userDto)) {
             throw new BadRequestException("All fields are required.");
         }
-        User currentUser = userRepo.findById(userDto.getId()).orElseThrow(UserNotFoundException::new);
-        if(checkIfUsernameExists(userDto)) {
-            throw new UserAlreadyExistsException("User with enail: " + userDto.getUsername() + " already exists.");
-        }
-        User updatedUser = ModelMapperUtils.map(userDto, User.class);
+        UserEntity currentUser = userRepo.findById(userDto.getId()).orElseThrow(UserNotFoundException::new);
+
+        UserEntity updatedUser = ModelMapperUtils.map(userDto, UserEntity.class);
+        if (userDto.getPassword() == null){
         updatedUser.setPassword(currentUser.getPassword());
+        }else {
+            updatedUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        }
         updatedUser.setUpdatedAt(Instant.now());
+        updatedUser.setCreatedAt(currentUser.getCreatedAt());
+        updatedUser.setStatus(currentUser.getStatus());
+        updatedUser.setRole(currentUser.getRole());
         updatedUser = userRepo.save(updatedUser);
         return ModelMapperUtils.map(updatedUser, UserDto.class);
     }
@@ -54,34 +66,38 @@ public class UserService {
     }
 
     public UserDto deactivateUser(long id) {
-        User user = userRepo.findById(id).orElseThrow(UserNotFoundException::new);
-        user.setStatus(UserStatus.INACTIVE);
-        user.setUpdatedAt(Instant.now());
-        return ModelMapperUtils.map(userRepo.save(user), UserDto.class);
+        UserEntity userEntity = userRepo.findById(id).orElseThrow(UserNotFoundException::new);
+        userEntity.setStatus(UserStatus.INACTIVE);
+        userEntity.setUpdatedAt(Instant.now());
+        return ModelMapperUtils.map(userRepo.save(userEntity), UserDto.class);
     }
 
     public void deleteUser(long id) {
-        User user = userRepo.findById(id).orElseThrow(UserNotFoundException::new);
-        user.setStatus(UserStatus.INACTIVE);
-        userRepo.delete(user);
+
+        userRepo.deleteById(id);
     }
 
-    public boolean checkUserPermissionToGetUserInformation(long id) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return user.getRole().equals(Role.ADMIN) || user.getId() == id;
+    public boolean checkUserPermissionToGetUserInformation(String email) {
+        UserEntity userEntity = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userEntity.getRole().equals(Role.ADMIN) || userEntity.getEmail().equalsIgnoreCase(email);
     }
 
     public UserDto createUser(UserDto userDto) {
-        if(!validateNewUser(userDto)) {
-            throw new BadRequestException("All fields are required.");
-        }
+
         if(checkIfUsernameExists(userDto)) {
             throw new UserAlreadyExistsException("User already exists.");
         }
+
         userDto.setStatus(UserStatus.ACTIVE);
         userDto.setCreatedAt(Instant.now());
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        User newUser = userRepo.save(ModelMapperUtils.map(userDto, User.class));
+        userDto.setRole(Role.TRAVELLER);
+
+        if(!validateNewUser(userDto)) {
+            throw new BadRequestException("All fields are required.");
+        }
+
+        UserEntity newUser = userRepo.save(ModelMapperUtils.map(userDto, UserEntity.class));
         return ModelMapperUtils.map(newUser, UserDto.class);
     }
 
@@ -97,15 +113,15 @@ public class UserService {
     }
 
     public boolean checkIfUsernameExists(UserDto userDto) {
-        Optional<User> existingUser = userRepo.findByUsername(userDto.getUsername());
+        Optional<UserEntity> existingUser = userRepo.findByUsername(userDto.getUsername());
         return existingUser.isPresent();
     }
 
     public UserDto getLoggedInUser() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(user == null)
+        UserEntity userEntity = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(userEntity == null)
             throw new BadRequestException("Session Expired.");
-        return ModelMapperUtils.map(user, UserDto.class);
+        return ModelMapperUtils.map(userEntity, UserDto.class);
     }
 
 }

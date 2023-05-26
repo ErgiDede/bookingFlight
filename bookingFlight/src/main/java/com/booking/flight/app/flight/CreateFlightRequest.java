@@ -1,4 +1,4 @@
-package com.booking.flight.app.dto;
+package com.booking.flight.app.flight;
 
 import com.booking.flight.app.shared.enums.BookingEnum;
 import lombok.AllArgsConstructor;
@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 import java.time.LocalTime;
 import java.util.Date;
 
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FlightDto {
+public class CreateFlightRequest {
 
-    private Long id;
     private String airlineCode;
     private String flightNumber;
     private String origin;

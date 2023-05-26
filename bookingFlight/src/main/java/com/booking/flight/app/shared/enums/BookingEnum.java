@@ -1,6 +1,6 @@
 package com.booking.flight.app.shared.enums;
 
-public enum BookingClassesEnum {
+public enum BookingEnum {
     ECONOMY,
     PREMIUM_ECONOMY,
     BUSINESS,

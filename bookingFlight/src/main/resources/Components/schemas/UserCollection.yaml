@@ -1,0 +1,7 @@
+type: object
+properties:
+  users:
+    type: array
+    items:
+      $ref: './Components/schemas/User.yaml'
+

@@ -8,7 +8,7 @@
 		<version>3.1.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.booking.flight</groupId>
+	<groupId>com.booking.flightEntity</groupId>
 	<artifactId>bookingFlight</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>bookingFlight</name>
@@ -180,8 +180,8 @@
 								${project.basedir}/src/main/resources/openapi.yaml
 							</inputSpec>
 							<generatorName>spring</generatorName>
-							<apiPackage>com.booking.flight.api</apiPackage>
-							<modelPackage>com.booking.flight.model</modelPackage>
+							<apiPackage>com.booking.flightEntity.api</apiPackage>
+							<modelPackage>com.booking.flightEntity.model</modelPackage>
 						</configuration>
 					</execution>
 				</executions>
