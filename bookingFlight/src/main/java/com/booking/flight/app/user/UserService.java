@@ -1,6 +1,9 @@
 package com.booking.flight.app.user;
 
 
+import com.booking.flight.app.flight.BookingFlight;
+import com.booking.flight.app.flight.FlightEntity;
+import com.booking.flight.app.flight.FlightRepository;
 import com.booking.flight.app.shared.enums.Role;
 import com.booking.flight.app.shared.enums.UserStatus;
 import com.booking.flight.app.shared.exceptions.BadRequestException;
@@ -15,14 +18,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepo userRepo;
+    private final FlightRepository flightRepository;
     private final PasswordEncoder passwordEncoder;
 
     public UserDetails findByActiveUsername(String username) throws UsernameNotFoundException {
@@ -122,6 +125,21 @@ public class UserService {
         if(userEntity == null)
             throw new BadRequestException("Session Expired.");
         return ModelMapperUtils.map(userEntity, UserDto.class);
+    }
+
+    public List<UserResponse> getUsersByFlight(Long flightId) {
+        FlightEntity flightEntity = flightRepository.findById(flightId).orElse(null); // Replace "flightRepository" with your actual repository
+
+        Set<UserEntity> users = new HashSet<>();
+        if (flightEntity != null) {
+            List<BookingFlight> bookingFlights = flightEntity.getBookingFlights();
+            for (BookingFlight bookingFlight : bookingFlights) {
+                UserEntity userEntity = bookingFlight.getBookingEntity().getUserEntity();
+                users.add(userEntity);
+            }
+        }
+
+        return ModelMapperUtils.mapAll(users, UserResponse.class);
     }
 
 }

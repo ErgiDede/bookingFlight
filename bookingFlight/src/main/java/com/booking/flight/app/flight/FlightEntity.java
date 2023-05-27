@@ -1,19 +1,20 @@
 package com.booking.flight.app.flight;
 
 
-import com.booking.flight.app.booking.BookingEntity;
 import com.booking.flight.app.shared.enums.BookingEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "flight")
@@ -41,15 +42,42 @@ public class FlightEntity {
     private LocalTime arrivalTime;
     @Column(name = "price", nullable = false)
     private Double price;
-    @Column(name = "totalSeats", nullable = false)
-    private Integer TotalSeats;
-    @Column(name = "classes", nullable = false)
 
+    @Column(name = "totalSeats", nullable = false)
+    private Integer totalSeats;
+
+    @Column(name = "availableSeats", nullable = false)
+    private Integer availableSeats;
+
+    @Column(name = "classes", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private BookingEnum bookingClasses;
 
     @OneToMany(mappedBy = "flightEntity", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<BookingFlight> bookingFlights;
 
+    @Transient
+    public Boolean isBooked(){
+        return !Objects.equals(totalSeats, availableSeats);
+    }
+
+    @Transient
+    public Boolean isFullyBooked(){
+        return availableSeats == 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        FlightEntity flight = (FlightEntity) o;
+        return getId() != null && Objects.equals(getId(), flight.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
 

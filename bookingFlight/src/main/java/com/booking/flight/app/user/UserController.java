@@ -1,5 +1,6 @@
 package com.booking.flight.app.user;
 
+import com.booking.flight.app.booking.BookingResponse;
 import com.booking.flight.app.shared.objects.MessageJson;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -65,5 +68,10 @@ public class UserController {
     @GetMapping("/loggedInUser")
     public ResponseEntity<?> getLoggedInUser() {
         return ResponseEntity.ok().body(userService.getLoggedInUser());
+    }
+
+    @GetMapping("/flights/{flightId}")
+    public List<UserResponse> bookingUserWhoHaveBookedOnASpecificedFlight(@PathVariable Long flightId){
+        return userService.getUsersByFlight(flightId);
     }
 }

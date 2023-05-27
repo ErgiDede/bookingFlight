@@ -8,12 +8,11 @@ import lombok.NoArgsConstructor;
 import java.time.LocalTime;
 import java.util.Date;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateFlightRequest {
-
+public class FlightResponse {
+    private Long id;
     private String airlineCode;
     private String flightNumber;
     private String origin;
@@ -22,8 +21,6 @@ public class CreateFlightRequest {
     private Date arrivalDate;
     private LocalTime departureTime;
     private LocalTime arrivalTime;
-    private Double price;
-    private Integer totalSeats;
-    private Integer availableSeats;
     private BookingEnum bookingClasses;
+
 }

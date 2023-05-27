@@ -7,12 +7,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/flights")
@@ -30,6 +32,30 @@ public class FlightController {
         logger.info("Flight created with flightNumber: " + createFlightRequest.getFlightNumber());
         flightService.createFlight(createFlightRequest);
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(new MessageJson("Flight is created successfully."));
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateFlight(@Valid @RequestBody UpdateFlightRequest updateFlightRequest,@PathVariable(value = "id") long id){
+        logger.info("Flight updated successfully   with flightNumber: " + updateFlightRequest.getFlightNumber());
+        flightService.updateFlight(updateFlightRequest,id);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(new MessageJson("Flight updated successfully."));
+    }
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteFlight(@PathVariable(value = "id") long id){
+        logger.info("Flight deleted successfully   with id: " + id);
+        flightService.deleteFlight(id);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(new MessageJson("Flight deleted successfully."));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<FlightResponse>> searchFlights(
+            @RequestParam String origin,
+            @RequestParam String destination,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date flightDate,
+            @RequestParam(required = false) String airlineCode
+    ) {
+        List<FlightResponse> flights = flightService.searchFlights(origin, destination, flightDate, airlineCode);
+        return new ResponseEntity<>(flights, HttpStatus.OK);
     }
 
  }

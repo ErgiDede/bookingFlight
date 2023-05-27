@@ -12,8 +12,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateFlightRequest {
-
+public class UpdateFlightRequest {
     private String airlineCode;
     private String flightNumber;
     private String origin;

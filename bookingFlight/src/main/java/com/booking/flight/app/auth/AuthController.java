@@ -31,6 +31,4 @@ public class AuthController{
     public ResponseEntity<?> refreshToken(HttpServletRequest request) throws IOException {
         return ResponseEntity.ok().body(authService.refreshToken(request));
     }
-
-
 }

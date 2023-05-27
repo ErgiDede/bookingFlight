@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -16,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "booking")
 public class BookingEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,7 +32,20 @@ public class BookingEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity userEntity;
 
+    @Column(name = "bookingDate", nullable = false)
+    @Temporal(value = TemporalType.DATE)
+    private Date bookingDate;
+
     @OneToMany(mappedBy = "bookingEntity", cascade = CascadeType.ALL)
     private List<BookingFlight> bookingFlights;
+
+    @Column(name = "cancellationRequested")
+    private Boolean cancellationRequested;
+
+    @Column(name = "cancellationApproval")
+    private Boolean cancellationApproval;
+
+    @Column(name = "cancellationDeclineReason")
+    private String cancellationDeclineReason;
 
 }
