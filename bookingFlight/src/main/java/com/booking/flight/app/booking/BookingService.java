@@ -4,13 +4,10 @@ import com.booking.flight.app.flight.BookingFlight;
 import com.booking.flight.app.flight.FlightEntity;
 import com.booking.flight.app.flight.FlightRepository;
 import com.booking.flight.app.flight.FlightResponse;
-import com.booking.flight.app.loadData.LoadData;
 import com.booking.flight.app.shared.utils.ModelMapperUtils;
-import com.booking.flight.app.user.UserDto;
 import com.booking.flight.app.user.UserEntity;
-import com.booking.flight.app.user.UserRepo;
+import com.booking.flight.app.user.UserResponse;
 import com.booking.flight.app.user.UserService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,17 +37,16 @@ public class BookingService {
         if (flights.size() != flightIds.size()) {
             throw new IllegalArgumentException("One or more flights not found");
         }
-        UserDto userDto = userService.getLoggedInUser();
+        UserResponse userResponse = userService.getLoggedInUser();
 
-        UserEntity user = ModelMapperUtils.map(userDto, UserEntity.class);
+        UserEntity user = ModelMapperUtils.map(userResponse, UserEntity.class);
 
         // Check availability for all flights
         for (FlightEntity flight : flights) {
-            if (flight.isFullyBooked()) {
+            if (Boolean.TRUE.equals(flight.isFullyBooked())) {
                 throw new IllegalStateException("No available seats for flight: " + flight.getId());
             }
         }
-
         // Create a new booking entity
         BookingEntity booking = new BookingEntity();
         booking.setUserEntity(user);
@@ -63,7 +59,6 @@ public class BookingService {
             bookingFlight.setFlightEntity(flight);
             bookingFlight.setBookingEntity(booking);
             bookingFlights.add(bookingFlight);
-
             // Update available seats count
             flight.setAvailableSeats(flight.getAvailableSeats() - 1);
         }
@@ -72,8 +67,7 @@ public class BookingService {
         boolean isFlightDateValid = checkFlightDate(booking);
         if (isFlightDateValid) {
             bookingRepository.save(booking);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Flight departure date must be in the future");
         }
 
@@ -81,7 +75,7 @@ public class BookingService {
 
     }
 
-    public List<BookingResponse> getAllBookings(Long userId) {
+    public List<BookingResponse> getBookingsByUserId(Long userId) {
         List<BookingEntity> bookingEntities = bookingRepository.findByUserEntityId(userId); // Replace "bookingRepository" with your actual repository
 
         List<BookingResponse> bookingResponses = new ArrayList<>();
@@ -145,7 +139,7 @@ public class BookingService {
         }
     }
 
-    public List<BookingResponse> getAllBookingsForLogedInUser( int page, int size) {
+    public List<BookingResponse> getAllBookingsForLoggedInUser(int page, int size) {
         Long userId = getLogedIdUserId();
         Pageable pageable = PageRequest.of(page, size);
         Page<BookingEntity> bookingPage = bookingRepository.findByUserEntityIdOrderByBookingDateDesc(userId, pageable);
@@ -176,8 +170,8 @@ public class BookingService {
         return true; // All flight departure dates are in the future
     }
 
-    public Long getLogedIdUserId(){
-        UserDto userDto = userService.getLoggedInUser();
-        return userDto.getId();
+    public Long getLogedIdUserId() {
+        UserResponse userDto = userService.getLoggedInUser();
+        return userService.getLoggedInUser().getId();
     }
 }

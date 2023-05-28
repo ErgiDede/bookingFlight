@@ -29,105 +29,77 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public UserDetails findByActiveUsername(String username) throws UsernameNotFoundException {
-        return userRepo.findByUsernameAndStatus(username, UserStatus.ACTIVE).
-                orElseThrow(UserNotFoundException::new);
+        return userRepo.findByUsernameAndStatus(username, UserStatus.ACTIVE).orElseThrow(UserNotFoundException::new);
     }
 
-    public UserDto getByEmail(String email) throws UsernameNotFoundException {
+    public UserResponse getByEmail(String email) throws UsernameNotFoundException {
         UserEntity user = userRepo.findByEmail(email).
                 orElseThrow(UserNotFoundException::new);
-        UserDto userDto = ModelMapperUtils.map(user, UserDto.class);
-        return userDto;
+        return ModelMapperUtils.map(user, UserResponse.class);
     }
 
-    public UserDto updateUser(UserDto userDto) {
-        if(!validateUser(userDto)) {
-            throw new BadRequestException("All fields are required.");
-        }
-        UserEntity currentUser = userRepo.findById(userDto.getId()).orElseThrow(UserNotFoundException::new);
 
-        UserEntity updatedUser = ModelMapperUtils.map(userDto, UserEntity.class);
-        if (userDto.getPassword() == null){
-        updatedUser.setPassword(currentUser.getPassword());
-        }else {
-            updatedUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+    public UserResponse updateUser(UpdateUserRequest updateUserRequest) {
+        UserEntity currentUser = userRepo.findById(updateUserRequest.getId()).orElseThrow(UserNotFoundException::new);
+
+        UserEntity updatedUser = ModelMapperUtils.map(updateUserRequest, UserEntity.class);
+        if (updateUserRequest.getPassword() == null) {
+            updatedUser.setPassword(currentUser.getPassword());
+        } else {
+            updatedUser.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
         }
         updatedUser.setUpdatedAt(Instant.now());
         updatedUser.setCreatedAt(currentUser.getCreatedAt());
         updatedUser.setStatus(currentUser.getStatus());
         updatedUser.setRole(currentUser.getRole());
         updatedUser = userRepo.save(updatedUser);
-        return ModelMapperUtils.map(updatedUser, UserDto.class);
+        return ModelMapperUtils.map(updatedUser, UserResponse.class);
     }
 
-    public UserDto getUserById(long id) {
-        return ModelMapperUtils.map(userRepo.findById(id).orElseThrow(UserNotFoundException::new), UserDto.class);
+    public List<UserResponse> getAllUsers() {
+        return ModelMapperUtils.mapAll(userRepo.findAll(), UserResponse.class);
     }
 
-    public List<UserDto> getAllUsers() {
-        return ModelMapperUtils.mapAll(userRepo.findAll(), UserDto.class);
-    }
-
-    public UserDto deactivateUser(long id) {
-        UserEntity userEntity = userRepo.findById(id).orElseThrow(UserNotFoundException::new);
-        userEntity.setStatus(UserStatus.INACTIVE);
-        userEntity.setUpdatedAt(Instant.now());
-        return ModelMapperUtils.map(userRepo.save(userEntity), UserDto.class);
-    }
 
     public void deleteUser(long id) {
-
         userRepo.deleteById(id);
     }
 
-    public boolean checkUserPermissionToGetUserInformation(String email) {
-        UserEntity userEntity = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userEntity.getRole().equals(Role.ADMIN) || userEntity.getEmail().equalsIgnoreCase(email);
-    }
+    public UserResponse createUser(CreateUserRequest createUserRequest) {
 
-    public UserDto createUser(UserDto userDto) {
-
-        if(checkIfUsernameExists(userDto)) {
+        if (checkIfUsernameExists(createUserRequest)) {
             throw new UserAlreadyExistsException("User already exists.");
         }
 
-        userDto.setStatus(UserStatus.ACTIVE);
-        userDto.setCreatedAt(Instant.now());
-        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        userDto.setRole(Role.TRAVELLER);
+        createUserRequest.setStatus(UserStatus.ACTIVE);
+        createUserRequest.setCreatedAt(Instant.now());
+        createUserRequest.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
+        createUserRequest.setRole(Role.TRAVELLER);
 
-        if(!validateNewUser(userDto)) {
+        if (!validateNewUser(createUserRequest)) {
             throw new BadRequestException("All fields are required.");
         }
 
-        UserEntity newUser = userRepo.save(ModelMapperUtils.map(userDto, UserEntity.class));
-        return ModelMapperUtils.map(newUser, UserDto.class);
+        UserEntity newUser = userRepo.save(ModelMapperUtils.map(createUserRequest, UserEntity.class));
+        return ModelMapperUtils.map(newUser, UserResponse.class);
     }
 
-    public boolean validateUser(UserDto userDto) {
-        return (userDto.getFirstName() != null && userDto.getLastName() != null
-                && userDto.getUsername() != null && userDto.getRole() != null);
+    public boolean validateNewUser(CreateUserRequest createUserRequest) {
+        return (createUserRequest.getFirstName() != null && createUserRequest.getLastName() != null && createUserRequest.getUsername() != null && createUserRequest.getRole() != null && createUserRequest.getPassword() != null);
     }
 
-    public boolean validateNewUser(UserDto userDto) {
-        return (userDto.getFirstName() != null && userDto.getLastName() != null
-                && userDto.getUsername() != null && userDto.getRole() != null
-                && userDto.getPassword() != null);
-    }
-
-    public boolean checkIfUsernameExists(UserDto userDto) {
-        Optional<UserEntity> existingUser = userRepo.findByUsername(userDto.getUsername());
+    public boolean checkIfUsernameExists(CreateUserRequest createUserRequest) {
+        Optional<UserEntity> existingUser = userRepo.findByUsername(createUserRequest.getUsername());
         return existingUser.isPresent();
     }
 
-    public UserDto getLoggedInUser() {
+    public UserResponse getLoggedInUser() {
         UserEntity userEntity = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(userEntity == null)
-            throw new BadRequestException("Session Expired.");
-        return ModelMapperUtils.map(userEntity, UserDto.class);
+        if (userEntity == null) throw new BadRequestException("Session Expired.");
+        return ModelMapperUtils.map(userEntity, UserResponse.class);
     }
 
-    public List<UserResponse> getUsersByFlight(Long flightId) {
+    public List<UserResponse> getTravellersByFlight(Long flightId) {
         FlightEntity flightEntity = flightRepository.findById(flightId).orElse(null); // Replace "flightRepository" with your actual repository
 
         Set<UserEntity> users = new HashSet<>();

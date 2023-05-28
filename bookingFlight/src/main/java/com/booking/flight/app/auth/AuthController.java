@@ -21,14 +21,14 @@ public class AuthController{
 
     private final AuthService authService;
 
-
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthRequest request) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<?> refreshToken(HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> refreshToken(HttpServletRequest request)  {
         return ResponseEntity.ok().body(authService.refreshToken(request));
     }
+
 }

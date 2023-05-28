@@ -22,22 +22,22 @@ public class FlightService {
         flightRepository.save(ModelMapperUtils.map(createFlightRequest, FlightEntity.class));
     }
 
-    public void updateFlight(UpdateFlightRequest updateFlightRequest,Long flightId) {
+    public void updateFlight(UpdateFlightRequest updateFlightRequest, Long flightId) {
         FlightEntity flight = flightRepository.findById(flightId)
                 .orElseThrow(EntityNotFoundException::new);
-        if (Boolean.TRUE.equals(flight.isBooked())){
+        if (Boolean.TRUE.equals(flight.isBooked())) {
             flight.setDepartureTime(updateFlightRequest.getDepartureTime());
             flightRepository.save(flight);
-        }else {
+        } else {
             ModelMapperUtils.map(updateFlightRequest, flight);
-          flightRepository.save(flight);
+            flightRepository.save(flight);
         }
     }
 
     public void deleteFlight(Long flightId) {
         FlightEntity flight = flightRepository.findById(flightId)
                 .orElseThrow(EntityNotFoundException::new);
-        if (!Boolean.TRUE.equals(flight.isBooked())){
+        if (!Boolean.TRUE.equals(flight.isBooked())) {
             flightRepository.delete(flight);
         }
 

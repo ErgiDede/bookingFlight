@@ -58,12 +58,12 @@ public class FlightEntity {
     private List<BookingFlight> bookingFlights;
 
     @Transient
-    public Boolean isBooked(){
+    public Boolean isBooked() {
         return !Objects.equals(totalSeats, availableSeats);
     }
 
     @Transient
-    public Boolean isFullyBooked(){
+    public Boolean isFullyBooked() {
         return availableSeats == 0;
     }
 
