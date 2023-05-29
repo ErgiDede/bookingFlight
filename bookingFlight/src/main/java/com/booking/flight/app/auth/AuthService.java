@@ -1,15 +1,16 @@
 package com.booking.flight.app.auth;
 
-
 import com.booking.flight.app.configs.jwt.JwtUtils;
 
 import com.booking.flight.app.shared.exceptions.ForbiddenException;
+import com.booking.flight.app.user.UserEntity;
 import com.booking.flight.app.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +21,6 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
-
     public AuthResponse authenticate(AuthRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -28,9 +28,9 @@ public class AuthService {
                         request.getPassword()
                 )
         );
-        var user = userService.findByActiveUsername(request.getUsername());
-        var jwtToken = jwtUtils.generateToken(user);
-        var refreshToken = jwtUtils.generateRefreshToken(user);
+        UserDetails user = userService.findByActiveUsername(request.getUsername());
+        String jwtToken = jwtUtils.generateToken(user);
+        String refreshToken = jwtUtils.generateRefreshToken(user);
         return AuthResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
@@ -47,7 +47,7 @@ public class AuthService {
         refreshToken = authHeader.substring(7);
         username = jwtUtils.getSubject(refreshToken);
         if (username != null) {
-            var user = userService.findByActiveUsername(username);
+            UserDetails user = userService.findByActiveUsername(username);
             if (jwtUtils.validateToken(refreshToken)) {
                 var accessToken = jwtUtils.generateToken(user);
                 return AuthResponse.builder()

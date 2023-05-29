@@ -2,6 +2,8 @@ package com.booking.flight.app.booking;
 
 import com.booking.flight.app.shared.objects.MessageJson;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PreAuthorize("hasRole('TRAVELLER')")
     @PostMapping

@@ -14,10 +14,9 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "booking")
+@Table(name = "bookings")
 public class BookingEntity {
 
     @Id

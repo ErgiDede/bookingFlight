@@ -1,6 +1,7 @@
 package com.booking.flight.app.flight;
 
 import com.booking.flight.app.shared.enums.BookingEnum;
+import jakarta.validation.constraints.AssertTrue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,4 +27,9 @@ public class CreateFlightRequest {
     private Integer totalSeats;
     private Integer availableSeats;
     private BookingEnum bookingClasses;
+
+
+    public boolean isOriginDifferentFromDestination() {
+        return origin.equalsIgnoreCase(destination);
+    }
 }

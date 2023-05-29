@@ -4,5 +4,5 @@ public enum BookingEnum {
     ECONOMY,
     PREMIUM_ECONOMY,
     BUSINESS,
-    LOW_COST
+    FIRST
 }

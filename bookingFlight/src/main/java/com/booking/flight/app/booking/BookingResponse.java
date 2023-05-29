@@ -19,5 +19,4 @@ public class BookingResponse {
     private String cancellationReason;
     private Date bookingDate;
 
-
 }

@@ -1,13 +1,11 @@
 package com.booking.flight.app.flight;
 
 
-import com.booking.flight.app.shared.exceptions.UserNotFoundException;
 import com.booking.flight.app.shared.utils.ModelMapperUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +17,9 @@ public class FlightService {
     private final FlightRepository flightRepository;
 
     public void createFlight(CreateFlightRequest createFlightRequest) {
+        if (createFlightRequest.isOriginDifferentFromDestination()){
+            throw new IllegalArgumentException("Origin should be different from destination. ");
+        }
         flightRepository.save(ModelMapperUtils.map(createFlightRequest, FlightEntity.class));
     }
 

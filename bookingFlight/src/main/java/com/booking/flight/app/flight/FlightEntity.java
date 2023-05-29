@@ -3,8 +3,11 @@ package com.booking.flight.app.flight;
 
 import com.booking.flight.app.shared.enums.BookingEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.Check;
 
 import java.time.LocalTime;
 import java.util.Date;
@@ -17,25 +20,35 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "flight")
+@Table(name = "flights",uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"flightNumber", "departuresDate"})
+})
 public class FlightEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "airlineCode", nullable = false)
     private String airlineCode;
+
     @Column(name = "flightNumber", nullable = false, unique = true)
+    @Pattern(regexp = "^(LH|OS|LX|EW)\\d{3}$", message = "Flight number should start with the airline code followed by three numbers")
     private String flightNumber;
+
     @Column(name = "origin", nullable = false)
     private String origin;
+
     @Column(name = "destination", nullable = false)
     private String destination;
+
     @Column(name = "departuresDate", nullable = false)
     @Temporal(value = TemporalType.DATE)
     private Date departureDate;
+
     @Column(name = "arrivalDate", nullable = false)
     @Temporal(value = TemporalType.DATE)
     private Date arrivalDate;
+
     @Column(name = "departureTime", nullable = false)
     private LocalTime departureTime;
     @Column(name = "arrivalTime", nullable = false)
@@ -79,5 +92,6 @@ public class FlightEntity {
     public int hashCode() {
         return getClass().hashCode();
     }
+
 }
 

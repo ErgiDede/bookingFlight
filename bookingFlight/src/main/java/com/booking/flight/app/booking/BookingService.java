@@ -10,6 +10,8 @@ import com.booking.flight.app.user.UserResponse;
 import com.booking.flight.app.user.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,27 +28,28 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final FlightRepository flightRepository;
     private final UserService userService;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Transactional
-    public void createBooking(CreateBookingRequest createBookingRequest) {
-
+    public void createBooking(CreateBookingRequest createBookingRequest) throws IllegalArgumentException {
         List<Long> flightIds = createBookingRequest.getFlightIds();
         List<FlightEntity> flights = flightRepository.findAllById(flightIds);
 
         // Check if all flights exist
-        if (flights.size() != flightIds.size()) {
+        if (flights.isEmpty()) {
             throw new IllegalArgumentException("One or more flights not found");
         }
-        UserResponse userResponse = userService.getLoggedInUser();
 
+        UserResponse userResponse = userService.getLoggedInUser();
         UserEntity user = ModelMapperUtils.map(userResponse, UserEntity.class);
 
         // Check availability for all flights
         for (FlightEntity flight : flights) {
             if (Boolean.TRUE.equals(flight.isFullyBooked())) {
-                throw new IllegalStateException("No available seats for flight: " + flight.getId());
+                throw new IllegalArgumentException("No available seats for flight: " + flight.getId());
             }
         }
+
         // Create a new booking entity
         BookingEntity booking = new BookingEntity();
         booking.setUserEntity(user);
@@ -59,11 +62,13 @@ public class BookingService {
             bookingFlight.setFlightEntity(flight);
             bookingFlight.setBookingEntity(booking);
             bookingFlights.add(bookingFlight);
+
             // Update available seats count
             flight.setAvailableSeats(flight.getAvailableSeats() - 1);
         }
 
         booking.setBookingFlights(bookingFlights);
+
         boolean isFlightDateValid = checkFlightDate(booking);
         if (isFlightDateValid) {
             bookingRepository.save(booking);
@@ -71,21 +76,15 @@ public class BookingService {
             throw new IllegalArgumentException("Flight departure date must be in the future");
         }
 
-        flightRepository.saveAll(flights);
 
+        flightRepository.saveAll(flights);
     }
+
 
     public List<BookingResponse> getBookingsByUserId(Long userId) {
         List<BookingEntity> bookingEntities = bookingRepository.findByUserEntityId(userId); // Replace "bookingRepository" with your actual repository
 
-        List<BookingResponse> bookingResponses = new ArrayList<>();
-        for (BookingEntity bookingEntity : bookingEntities) {
-            BookingResponse bookingResponse = ModelMapperUtils.map(bookingEntity, BookingResponse.class);
-            bookingResponse.setFlightResponses(mapFlightEntitiesToResponses(bookingEntity.getBookingFlights()));
-            bookingResponses.add(bookingResponse);
-        }
-
-        return bookingResponses;
+        return getBookingResponses(bookingEntities);
     }
 
     private List<FlightResponse> mapFlightEntitiesToResponses(List<BookingFlight> bookingFlights) {
@@ -113,7 +112,6 @@ public class BookingService {
         if (booking != null) {
             booking.setCancelled(true);
             booking.setCancellationRequested(false);
-            // Update available seats for the flights if necessary
             updateAvailableSeats(booking);
             bookingRepository.save(booking);
         }
@@ -140,12 +138,16 @@ public class BookingService {
     }
 
     public List<BookingResponse> getAllBookingsForLoggedInUser(int page, int size) {
-        Long userId = getLogedIdUserId();
+        Long userId = getLoggedIdUserId();
         Pageable pageable = PageRequest.of(page, size);
         Page<BookingEntity> bookingPage = bookingRepository.findByUserEntityIdOrderByBookingDateDesc(userId, pageable);
 
         List<BookingEntity> bookingEntities = bookingPage.getContent();
 
+        return getBookingResponses(bookingEntities);
+    }
+
+    private List<BookingResponse> getBookingResponses(List<BookingEntity> bookingEntities) {
         List<BookingResponse> bookingResponses = new ArrayList<>();
         for (BookingEntity bookingEntity : bookingEntities) {
             BookingResponse bookingResponse = ModelMapperUtils.map(bookingEntity, BookingResponse.class);
@@ -166,12 +168,10 @@ public class BookingService {
                 return false; // Flight departure date is in the past
             }
         }
-
         return true; // All flight departure dates are in the future
     }
 
-    public Long getLogedIdUserId() {
-        UserResponse userDto = userService.getLoggedInUser();
+    public Long getLoggedIdUserId() {
         return userService.getLoggedInUser().getId();
     }
 }

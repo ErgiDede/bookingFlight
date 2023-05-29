@@ -6,6 +6,7 @@ import com.booking.flight.app.shared.exceptions.UserAlreadyExistsException;
 import com.booking.flight.app.shared.exceptions.UserNotFoundException;
 import com.booking.flight.app.shared.objects.ErrorMessageJson;
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({BadRequestException.class, UserAlreadyExistsException.class, UserNotFoundException.class,
             MethodArgumentNotValidException.class, IOException.class, ForbiddenException.class,
-            ExpiredJwtException.class})
+            ExpiredJwtException.class,IllegalArgumentException.class, EntityNotFoundException.class})
     public final ResponseEntity<?> handleException(Exception ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
         HttpStatus status;
@@ -44,7 +45,12 @@ public class GlobalExceptionHandler {
             status = HttpStatus.FORBIDDEN;
         } else if (ex instanceof ExpiredJwtException) {
             status = HttpStatus.UNAUTHORIZED;
-        } else {
+        }else if (ex instanceof IllegalArgumentException){
+            status = HttpStatus.NOT_ACCEPTABLE;
+        }else if (ex instanceof EntityNotFoundException){
+            status = HttpStatus.NOT_ACCEPTABLE;
+        }
+        else {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
             return handleExceptionInternal(ex, null, headers, status, request);
         }
