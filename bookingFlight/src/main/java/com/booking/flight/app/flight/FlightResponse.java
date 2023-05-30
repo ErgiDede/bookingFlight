@@ -12,6 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FlightResponse {
+
     private Long id;
     private String airlineCode;
     private String flightNumber;

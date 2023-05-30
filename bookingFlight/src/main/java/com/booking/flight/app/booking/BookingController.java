@@ -24,14 +24,9 @@ public class BookingController {
     @PreAuthorize("hasRole('TRAVELLER')")
     @PostMapping
     public ResponseEntity<?> createBooking(@RequestBody CreateBookingRequest request) {
-        try {
+            logger.info("Booking created successfully");
             bookingService.createBooking(request);
             return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(new MessageJson("Booking is created successfully."));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -49,6 +44,7 @@ public class BookingController {
     @PreAuthorize("hasRole('TRAVELLER')")
     @PutMapping("/{bookingId}/canceling")
     public ResponseEntity<String> requestCancellation(@PathVariable Long bookingId, @RequestParam String cancellationReason) {
+        logger.info("Cancellation request sent successfully for booking with id : " + bookingId);
         bookingService.requestCancellation(bookingId, cancellationReason);
         return ResponseEntity.ok("Cancellation request sent successfully");
     }
@@ -56,6 +52,7 @@ public class BookingController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{bookingId}/cancel/approve")
     public ResponseEntity<String> approveCancellation(@PathVariable Long bookingId) {
+        logger.info("Cancellation approved successfully for booking with id: " + bookingId);
         bookingService.approveCancellation(bookingId);
         return ResponseEntity.ok("Cancellation approved successfully");
     }
@@ -63,8 +60,10 @@ public class BookingController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{bookingId}/cancel/decline")
     public ResponseEntity<String> declineCancellation(@PathVariable Long bookingId, @RequestParam String declineReason) {
+        logger.info("Cancellation  declined for booking with id: " + bookingId);
+
         bookingService.declineCancellation(bookingId, declineReason);
-        return ResponseEntity.ok("Cancellation declined successfully");
+        return ResponseEntity.ok("Cancellation declined.");
     }
 
 }

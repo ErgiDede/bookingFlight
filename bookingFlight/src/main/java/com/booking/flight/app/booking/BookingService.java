@@ -8,6 +8,7 @@ import com.booking.flight.app.shared.utils.ModelMapperUtils;
 import com.booking.flight.app.user.UserEntity;
 import com.booking.flight.app.user.UserResponse;
 import com.booking.flight.app.user.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -76,8 +77,8 @@ public class BookingService {
             throw new IllegalArgumentException("Flight departure date must be in the future");
         }
 
-
         flightRepository.saveAll(flights);
+
     }
 
 
@@ -97,7 +98,7 @@ public class BookingService {
     }
 
     public void requestCancellation(Long bookingId, String cancellationReason) {
-        BookingEntity booking = bookingRepository.findById(bookingId).orElse(null);
+        BookingEntity booking = bookingRepository.findById(bookingId).orElseThrow(EntityNotFoundException::new);
 
         if (booking != null) {
             booking.setCancellationRequested(true);
@@ -107,7 +108,7 @@ public class BookingService {
     }
 
     public void approveCancellation(Long bookingId) {
-        BookingEntity booking = bookingRepository.findById(bookingId).orElse(null);
+        BookingEntity booking = bookingRepository.findById(bookingId).orElseThrow(EntityNotFoundException::new);
 
         if (booking != null) {
             booking.setCancelled(true);
@@ -118,7 +119,7 @@ public class BookingService {
     }
 
     public void declineCancellation(Long bookingId, String declineReason) {
-        BookingEntity booking = bookingRepository.findById(bookingId).orElse(null);
+        BookingEntity booking = bookingRepository.findById(bookingId).orElseThrow(EntityNotFoundException::new);
 
         if (booking != null && booking.getCancellationRequested()) {
             booking.setCancellationRequested(false);

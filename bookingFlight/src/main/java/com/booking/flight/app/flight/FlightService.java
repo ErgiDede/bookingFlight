@@ -40,6 +40,8 @@ public class FlightService {
                 .orElseThrow(EntityNotFoundException::new);
         if (!Boolean.TRUE.equals(flight.isBooked())) {
             flightRepository.delete(flight);
+        }else {
+            throw new IllegalArgumentException("Booked flights can not be deleted");
         }
 
     }

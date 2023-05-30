@@ -14,7 +14,7 @@ import java.time.Instant;
 @Data
 public class CreateUserRequest {
 
-    private Long id;
+    //private Long id;
     private String firstName;
     private String lastName;
     @Email
