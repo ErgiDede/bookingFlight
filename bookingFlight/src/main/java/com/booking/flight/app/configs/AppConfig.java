@@ -1,7 +1,7 @@
 package com.booking.flight.app.configs;
 
 
-import com.booking.flight.app.user.UserRepo;
+import com.booking.flight.app.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

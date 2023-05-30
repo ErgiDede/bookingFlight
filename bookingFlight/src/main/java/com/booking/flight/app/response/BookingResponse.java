@@ -1,6 +1,6 @@
-package com.booking.flight.app.booking;
+package com.booking.flight.app.response;
 
-import com.booking.flight.app.flight.FlightResponse;
+import com.booking.flight.app.response.FlightResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.booking.flight.app.flight;
+package com.booking.flight.app.response;
 
 import com.booking.flight.app.shared.enums.BookingEnum;
 import lombok.AllArgsConstructor;

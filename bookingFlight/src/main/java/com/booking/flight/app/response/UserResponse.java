@@ -1,4 +1,4 @@
-package com.booking.flight.app.user;
+package com.booking.flight.app.response;
 
 
 import com.booking.flight.app.shared.enums.Role;

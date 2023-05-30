@@ -1,13 +1,16 @@
-package com.booking.flight.app.booking;
+package com.booking.flight.app.service;
 
-import com.booking.flight.app.flight.BookingFlight;
-import com.booking.flight.app.flight.FlightEntity;
-import com.booking.flight.app.flight.FlightRepository;
-import com.booking.flight.app.flight.FlightResponse;
+import com.booking.flight.app.entity.BookingEntity;
+import com.booking.flight.app.response.BookingResponse;
+import com.booking.flight.app.request.CreateBookingRequest;
+import com.booking.flight.app.entity.BookingFlight;
+import com.booking.flight.app.entity.FlightEntity;
+import com.booking.flight.app.repository.BookingRepository;
+import com.booking.flight.app.repository.FlightRepository;
+import com.booking.flight.app.response.FlightResponse;
 import com.booking.flight.app.shared.utils.ModelMapperUtils;
-import com.booking.flight.app.user.UserEntity;
-import com.booking.flight.app.user.UserResponse;
-import com.booking.flight.app.user.UserService;
+import com.booking.flight.app.entity.UserEntity;
+import com.booking.flight.app.response.UserResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

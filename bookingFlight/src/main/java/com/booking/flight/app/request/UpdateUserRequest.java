@@ -1,20 +1,14 @@
-package com.booking.flight.app.user;
+package com.booking.flight.app.request;
 
-
-import com.booking.flight.app.shared.enums.Role;
-import com.booking.flight.app.shared.enums.UserStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-import java.time.Instant;
-
 @Data
-public class CreateUserRequest {
-
-    //private Long id;
+public class UpdateUserRequest {
+    private Long id;
     private String firstName;
     private String lastName;
     @Email
@@ -22,10 +16,6 @@ public class CreateUserRequest {
     private String username;
     @Size(min = 8, message = "Password is too short. It needs to be at least 8 characters.")
     private String password;
-    private Role role;
-    private UserStatus status;
-    private Instant createdAt;
-    private Instant updatedAt;
     private String address;
     private String phoneNumber;
     @JsonIgnore

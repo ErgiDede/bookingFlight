@@ -1,6 +1,11 @@
-package com.booking.flight.app.flight;
+package com.booking.flight.app.service;
 
 
+import com.booking.flight.app.request.CreateFlightRequest;
+import com.booking.flight.app.entity.FlightEntity;
+import com.booking.flight.app.response.FlightResponse;
+import com.booking.flight.app.request.UpdateFlightRequest;
+import com.booking.flight.app.repository.FlightRepository;
 import com.booking.flight.app.shared.utils.ModelMapperUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

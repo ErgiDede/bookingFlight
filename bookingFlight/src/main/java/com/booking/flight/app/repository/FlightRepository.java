@@ -1,5 +1,6 @@
-package com.booking.flight.app.flight;
+package com.booking.flight.app.repository;
 
+import com.booking.flight.app.entity.FlightEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;

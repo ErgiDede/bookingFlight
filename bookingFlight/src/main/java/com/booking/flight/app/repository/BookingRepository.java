@@ -1,6 +1,6 @@
-package com.booking.flight.app.booking;
+package com.booking.flight.app.repository;
 
-import com.booking.flight.app.flight.FlightEntity;
+import com.booking.flight.app.entity.BookingEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

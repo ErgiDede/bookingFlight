@@ -1,6 +1,10 @@
-package com.booking.flight.app.flight;
+package com.booking.flight.app.controller;
 
 
+import com.booking.flight.app.request.CreateFlightRequest;
+import com.booking.flight.app.response.FlightResponse;
+import com.booking.flight.app.service.FlightService;
+import com.booking.flight.app.request.UpdateFlightRequest;
 import com.booking.flight.app.shared.objects.MessageJson;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

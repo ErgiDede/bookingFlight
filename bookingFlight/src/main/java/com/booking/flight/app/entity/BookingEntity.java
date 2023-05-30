@@ -1,7 +1,5 @@
-package com.booking.flight.app.booking;
+package com.booking.flight.app.entity;
 
-import com.booking.flight.app.flight.BookingFlight;
-import com.booking.flight.app.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;

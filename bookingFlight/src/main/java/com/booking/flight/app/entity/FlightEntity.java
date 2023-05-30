@@ -1,13 +1,11 @@
-package com.booking.flight.app.flight;
+package com.booking.flight.app.entity;
 
 
 import com.booking.flight.app.shared.enums.BookingEnum;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.hibernate.annotations.Check;
 
 import java.time.LocalTime;
 import java.util.Date;

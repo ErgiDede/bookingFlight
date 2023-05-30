@@ -1,4 +1,4 @@
-package com.booking.flight.app.booking;
+package com.booking.flight.app.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

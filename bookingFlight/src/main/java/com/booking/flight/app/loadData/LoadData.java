@@ -3,8 +3,8 @@ package com.booking.flight.app.loadData;
 
 import com.booking.flight.app.shared.enums.Role;
 import com.booking.flight.app.shared.enums.UserStatus;
-import com.booking.flight.app.user.UserEntity;
-import com.booking.flight.app.user.UserRepo;
+import com.booking.flight.app.entity.UserEntity;
+import com.booking.flight.app.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;

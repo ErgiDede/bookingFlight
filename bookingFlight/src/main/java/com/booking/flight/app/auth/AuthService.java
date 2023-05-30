@@ -3,8 +3,7 @@ package com.booking.flight.app.auth;
 import com.booking.flight.app.configs.jwt.JwtUtils;
 
 import com.booking.flight.app.shared.exceptions.ForbiddenException;
-import com.booking.flight.app.user.UserEntity;
-import com.booking.flight.app.user.UserService;
+import com.booking.flight.app.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

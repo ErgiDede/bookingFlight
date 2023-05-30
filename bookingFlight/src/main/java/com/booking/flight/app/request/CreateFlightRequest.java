@@ -1,6 +1,7 @@
-package com.booking.flight.app.flight;
+package com.booking.flight.app.request;
 
 import com.booking.flight.app.shared.enums.BookingEnum;
+import jakarta.validation.constraints.AssertTrue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,8 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateFlightRequest {
+public class CreateFlightRequest {
+
     private String airlineCode;
     private String flightNumber;
     private String origin;
@@ -25,4 +27,9 @@ public class UpdateFlightRequest {
     private Integer totalSeats;
     private Integer availableSeats;
     private BookingEnum bookingClasses;
+
+
+    public boolean isOriginDifferentFromDestination() {
+        return origin.equalsIgnoreCase(destination);
+    }
 }

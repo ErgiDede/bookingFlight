@@ -1,15 +1,20 @@
-package com.booking.flight.app.user;
+package com.booking.flight.app.service;
 
 
-import com.booking.flight.app.flight.BookingFlight;
-import com.booking.flight.app.flight.FlightEntity;
-import com.booking.flight.app.flight.FlightRepository;
+import com.booking.flight.app.entity.BookingFlight;
+import com.booking.flight.app.entity.FlightEntity;
+import com.booking.flight.app.repository.FlightRepository;
+import com.booking.flight.app.repository.UserRepo;
 import com.booking.flight.app.shared.enums.Role;
 import com.booking.flight.app.shared.enums.UserStatus;
 import com.booking.flight.app.shared.exceptions.BadRequestException;
 import com.booking.flight.app.shared.exceptions.UserAlreadyExistsException;
 import com.booking.flight.app.shared.exceptions.UserNotFoundException;
 import com.booking.flight.app.shared.utils.ModelMapperUtils;
+import com.booking.flight.app.request.CreateUserRequest;
+import com.booking.flight.app.request.UpdateUserRequest;
+import com.booking.flight.app.entity.UserEntity;
+import com.booking.flight.app.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
