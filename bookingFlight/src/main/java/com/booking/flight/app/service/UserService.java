@@ -105,7 +105,7 @@ public class UserService {
     }
 
     public List<UserResponse> getTravellersByFlight(Long flightId) {
-        FlightEntity flightEntity = flightRepository.findById(flightId).orElse(null); // Replace "flightRepository" with your actual repository
+        FlightEntity flightEntity = flightRepository.findById(flightId).orElse(null);
 
         Set<UserEntity> users = new HashSet<>();
         if (flightEntity != null) {
