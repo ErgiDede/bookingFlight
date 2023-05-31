@@ -86,7 +86,8 @@ public class BookingService {
 
 
     public List<BookingResponse> getBookingsByUserId(Long userId) {
-        List<BookingEntity> bookingEntities = bookingRepository.findByUserEntityId(userId); // Replace "bookingRepository" with your actual repository
+        List<BookingEntity> bookingEntities = bookingRepository.findByUserEntityId(userId);
+
 
         return getBookingResponses(bookingEntities);
     }
