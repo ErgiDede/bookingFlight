@@ -11,7 +11,7 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI apiInfo() {
-        return new OpenAPI().info(new Info().title("Base Project").version("1.0.0"));
+        return new OpenAPI().info(new Info().title("BookingFlightApp").version("1.0.0"));
     }
 
     @Bean
